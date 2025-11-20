@@ -1,0 +1,21 @@
+{
+  "name": "caucoj-algorithm-mindmap",
+  "version": "1.0.0",
+  "description": "CAUCOJ 算法知识图谱思维导图插件",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hydro",
+    "mindmap",
+    "algorithm",
+    "caucoj"
+  ],
+  "author": "CAUCOJ",
+  "license": "AGPL-3.0-only",
+  "packageManager": "pnpm@10.12.4",
+  "devDependencies": {
+    "hydrooj": "5.0.0-beta.11"
+  }
+}

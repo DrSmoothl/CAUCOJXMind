@@ -1,0 +1,361 @@
+/* 基础样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #38bdf8;
+    --primary-dark: #0284c7;
+    --primary-light: #7dd3fc;
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: var(--text-primary);
+    overflow: hidden;
+}
+
+.container {
+    max-width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-color);
+}
+
+/* 头部样式 */
+.header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="white" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.3;
+}
+
+.header-content {
+    position: relative;
+    z-index: 1;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.icon {
+    width: 2rem;
+    height: 2rem;
+}
+
+.subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-left: 2.75rem;
+}
+
+/* 工具栏样式 */
+.toolbar {
+    background: var(--card-bg);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.toolbar-group {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.toolbar-info {
+    display: flex;
+    gap: 0.75rem;
+}
+
+/* 按钮样式 */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: var(--card-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-color);
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+/* 徽章样式 */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.875rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border-radius: 9999px;
+}
+
+/* 思维导图容器 */
+.mind-map-container {
+    flex: 1;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+}
+
+/* 禁用节点拖拽和选择 */
+.mind-elixir me-tpc {
+    cursor: default !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+}
+
+.mind-elixir * {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+/* 底部信息 */
+.footer {
+    background: var(--card-bg);
+    padding: 0.875rem 2rem;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+/* Mind Elixir 自定义样式 */
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+/* 自定义节点样式 */
+.mind-elixir-container {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+/* 根节点样式 */
+.mind-elixir me-root {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    padding: 1.25rem 2rem !important;
+    background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%) !important;
+    color: white !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 10px 25px rgba(56, 189, 248, 0.3) !important;
+    border: 3px solid rgba(255, 255, 255, 0.5) !important;
+    transition: all 0.3s ease !important;
+}
+
+.mind-elixir me-root:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 15px 35px rgba(56, 189, 248, 0.4) !important;
+}
+
+/* 一级节点样式 */
+.mind-elixir me-tpc[data-depth="1"] {
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    padding: 0.875rem 1.5rem !important;
+    background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 100%) !important;
+    color: #0c4a6e !important;
+    border-radius: 0.75rem !important;
+    box-shadow: 0 6px 15px rgba(56, 189, 248, 0.25) !important;
+    border: 2px solid rgba(255, 255, 255, 0.6) !important;
+    transition: all 0.3s ease !important;
+}
+
+.mind-elixir me-tpc[data-depth="1"]:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 8px 20px rgba(56, 189, 248, 0.35) !important;
+}
+
+/* 二级节点样式 */
+.mind-elixir me-tpc[data-depth="2"] {
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    padding: 0.625rem 1.125rem !important;
+    background: white !important;
+    color: #0c4a6e !important;
+    border: 2px solid #7dd3fc !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 4px 10px rgba(56, 189, 248, 0.15) !important;
+    transition: all 0.3s ease !important;
+}
+
+.mind-elixir me-tpc[data-depth="2"]:hover {
+    border-color: #38bdf8 !important;
+    background: #f0f9ff !important;
+    box-shadow: 0 6px 15px rgba(56, 189, 248, 0.2) !important;
+}
+
+/* 三级及更深节点样式 */
+.mind-elixir me-tpc[data-depth="3"],
+.mind-elixir me-tpc[data-depth="4"] {
+    font-size: 0.875rem !important;
+    padding: 0.5rem 0.875rem !important;
+    background: #f0f9ff !important;
+    color: #0c4a6e !important;
+    border: 1.5px solid #bae6fd !important;
+    border-radius: 0.375rem !important;
+    box-shadow: 0 2px 6px rgba(56, 189, 248, 0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+.mind-elixir me-tpc[data-depth="3"]:hover,
+.mind-elixir me-tpc[data-depth="4"]:hover {
+    border-color: #7dd3fc !important;
+    background: white !important;
+    box-shadow: 0 4px 10px rgba(56, 189, 248, 0.15) !important;
+}
+
+/* 连接线样式 - 主分支 */
+.mind-elixir svg line {
+    stroke: #38bdf8 !important;
+    stroke-width: 3 !important;
+    opacity: 0.8 !important;
+}
+
+.mind-elixir svg path {
+    stroke: #38bdf8 !important;
+    stroke-width: 2.5 !important;
+    opacity: 0.7 !important;
+    fill: none !important;
+}
+
+/* 选中状态 */
+.mind-elixir .selected {
+    outline: none !important;
+}
+
+/* 禁用编辑时的光标 */
+.mind-elixir me-tpc[contenteditable="false"] {
+    cursor: default !important;
+}
+
+/* 展开/折叠按钮保持可点击 */
+.mind-elixir .plus,
+.mind-elixir .minus {
+    background: #38bdf8 !important;
+    color: white !important;
+    border: 2px solid white !important;
+    box-shadow: 0 2px 8px rgba(56, 189, 248, 0.3) !important;
+    cursor: pointer !important;
+}
+
+.mind-elixir .plus:hover,
+.mind-elixir .minus:hover {
+    background: #0ea5e9 !important;
+    transform: scale(1.1) !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .title {
+        font-size: 1.5rem;
+    }
+    
+    .toolbar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .toolbar-group {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    
+    .btn {
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+/* 加载动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container > * {
+    animation: fadeIn 0.5s ease-out;
+}
