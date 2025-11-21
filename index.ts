@@ -19,7 +19,7 @@ const getMindMapData = () => ({
             {
                 id: "基础算法",
                 topic: "基础算法",
-                expanded: true,
+                expanded: false,
                 children: [
                     { id: "枚举", topic: "枚举" },
                     { 
@@ -48,7 +48,7 @@ const getMindMapData = () => ({
             {
                 id: "数据结构",
                 topic: "数据结构",
-                expanded: true,
+                expanded: false,
                 children: [
                     {
                         id: "栈",
@@ -184,7 +184,7 @@ const getMindMapData = () => ({
             {
                 id: "图论",
                 topic: "图论",
-                expanded: true,
+                expanded: false,
                 children: [
                     { 
                         id: "图的遍历", 
@@ -255,7 +255,7 @@ const getMindMapData = () => ({
             {
                 id: "字符串",
                 topic: "字符串",
-                expanded: true,
+                expanded: false,
                 children: [
                     { id: "KMP", topic: "KMP" },
                     { id: "字符串哈希", topic: "字符串哈希" },
@@ -280,7 +280,7 @@ const getMindMapData = () => ({
                 id: "动态规划",
                 topic: "动态规划",
                 direction: "left",
-                expanded: true,
+                expanded: false,
                 children: [
                     { id: "记忆化搜索", topic: "记忆化搜索" },
                     { id: "线性dp", topic: "线性dp" },
@@ -311,7 +311,7 @@ const getMindMapData = () => ({
                 id: "数学",
                 topic: "数学",
                 direction: "left",
-                expanded: true,
+                expanded: false,
                 children: [
                     { 
                         id: "数论", 
@@ -451,7 +451,7 @@ const getMindMapData = () => ({
                 id: "计算几何",
                 topic: "计算几何",
                 direction: "left",
-                expanded: true,
+                expanded: false,
                 children: [
                     { id: "几何基础", topic: "几何基础" },
                     { id: "Pick定理", topic: "Pick定理" },
@@ -523,7 +523,7 @@ const getMindMapData = () => ({
                 id: "杂项",
                 topic: "杂项",
                 direction: "left",
-                expanded: true,
+                expanded: false,
                 children: [
                     { id: "推式子/猜结论", topic: "推式子/猜结论" },
                     { id: "逆序对", topic: "逆序对" },
@@ -578,6 +578,7 @@ class AlgorithmMindMapProblemsHandler extends Handler {
     async get() {
         const tag = this.request.query.tag as string;
         const domainId = this.domain._id;
+        const uid = this.user._id;
         
         if (!tag) {
             this.response.body = {
@@ -594,6 +595,25 @@ class AlgorithmMindMapProblemsHandler extends Handler {
             tag: { $in: [tag] }
         }).sort({ pid: 1 }).toArray();
 
+        // 提取所有题目ID
+        const pids = problems.map(p => p.docId).filter(id => id != null);
+
+        // 批量查询用户状态（类似 problem.getListStatus）
+        const psdict: Record<number, any> = {};
+        if (uid && pids.length > 0) {
+            const psdocs = await this.ctx.db.collection('document.status').find({
+                domainId,
+                docType: 10,
+                uid,
+                docId: { $in: pids }
+            }).toArray();
+            
+            // 转换为字典，key 为 docId
+            psdocs.forEach(psdoc => {
+                psdict[psdoc.docId] = psdoc;
+            });
+        }
+
         // 计算难度的辅助函数
         const calculateDifficulty = (nSubmit: number, nAccept: number): number => {
             if (nSubmit === 0) return 0;
@@ -604,6 +624,22 @@ class AlgorithmMindMapProblemsHandler extends Handler {
             if (acceptanceRate >= 0.2) return 4;      // 困难
             if (acceptanceRate >= 0.1) return 5;      // 极难
             return 6;                                  // 噩梦
+        };
+
+        // 判断题目系列
+        const getSeries = (pid: string): string => {
+            if (!pid) return 'other';
+            const pidUpper = pid.toUpperCase();
+            if (pidUpper.startsWith('P') && /^P\d{4}$/.test(pidUpper)) {
+                return 'pat';  // PAT系列：P开头+4位数字
+            }
+            if (pidUpper.startsWith('L') || pidUpper.includes('天梯')) {
+                return 'ladder';  // 天梯赛系列
+            }
+            if (pidUpper.includes('多校') || pidUpper.includes('HDU')) {
+                return 'multi';  // 多校系列
+            }
+            return 'other';
         };
 
         // 格式化数据
@@ -619,19 +655,34 @@ class AlgorithmMindMapProblemsHandler extends Handler {
                 difficulty = calculateDifficulty(p.nSubmit || 0, p.nAccept || 0);
             }
             
+            // 获取用户状态
+            const psdoc = psdict[p.docId];
+            const isAccepted = psdoc && psdoc.status != null && psdoc.status > 0;
+            
             return {
                 pid: p.pid || '',
                 title: p.title || '',
                 difficulty: difficulty,
                 nSubmit: p.nSubmit || 0,
-                nAccept: p.nAccept || 0
+                nAccept: p.nAccept || 0,
+                accepted: isAccepted,
+                series: getSeries(p.pid || '')
             };
         });
+
+        // 按系列分组统计
+        const stats = {
+            all: formattedProblems.length,
+            pat: formattedProblems.filter(p => p.series === 'pat').length,
+            ladder: formattedProblems.filter(p => p.series === 'ladder').length,
+            multi: formattedProblems.filter(p => p.series === 'multi').length
+        };
 
         this.response.body = {
             success: true,
             tag,
-            problems: formattedProblems
+            problems: formattedProblems,
+            stats
         };
     }
 }
