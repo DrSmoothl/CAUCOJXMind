@@ -626,19 +626,25 @@ class AlgorithmMindMapProblemsHandler extends Handler {
             return 6;                                  // 噩梦
         };
 
-        // 判断题目系列
-        const getSeries = (pid: string): string => {
-            if (!pid) return 'other';
-            const pidUpper = pid.toUpperCase();
-            if (pidUpper.startsWith('P') && /^P\d{4}$/.test(pidUpper)) {
-                return 'pat';  // PAT系列：P开头+4位数字
+        // 判断题目系列（基于标签）
+        const getSeries = (tags: string[]): string => {
+            if (!tags || !Array.isArray(tags)) return 'other';
+            
+            // 天梯赛系列：完全匹配 Ladder 标签
+            if (tags.includes('Ladder')) {
+                return 'ladder';
             }
-            if (pidUpper.startsWith('L') || pidUpper.includes('天梯')) {
-                return 'ladder';  // 天梯赛系列
+            
+            // 多校系列：完全匹配 MultiSchool 标签
+            if (tags.includes('MultiSchool')) {
+                return 'multi';
             }
-            if (pidUpper.includes('多校') || pidUpper.includes('HDU')) {
-                return 'multi';  // 多校系列
+            
+            // PAT系列：包含 PAT 的标签（如 PAT、PAT甲级、PAT乙级 等）
+            if (tags.some(t => t.toUpperCase().includes('PAT'))) {
+                return 'pat';
             }
+            
             return 'other';
         };
 
@@ -666,7 +672,7 @@ class AlgorithmMindMapProblemsHandler extends Handler {
                 nSubmit: p.nSubmit || 0,
                 nAccept: p.nAccept || 0,
                 accepted: isAccepted,
-                series: getSeries(p.pid || '')
+                series: getSeries(p.tag || [])
             };
         });
 
