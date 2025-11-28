@@ -693,13 +693,28 @@ export async function apply(ctx: Context) {
     ctx.Route('algorithm_mindmap', '/mindmap', AlgorithmMindMapHandler);
     ctx.Route('algorithm_mindmap_api', '/mindmap/api/problems', AlgorithmMindMapProblemsHandler);
     
-    // 添加导航栏链接
-    ctx.injectUI('Nav', 'nav_mindmap', {
-        icon: 'sitemap',
-        displayName: '算法图谱',
-        checker: () => true,
-        args: { domainId: 'system' }
+    // 移除原有的题库导航
+    const navNodes = global.Hydro.ui.nodes.Nav;
+    const problemIndex = navNodes.findIndex(n => n.name === 'problem_main');
+    if (problemIndex !== -1) {
+        navNodes.splice(problemIndex, 1);
+    }
+    
+    // 在原位置插入算法图谱（在 training_main 之前，即原 problem_main 的位置）
+    ctx.injectUI('Nav', 'algorithm_mindmap', { 
+        prefix: 'sitemap',
+        before: 'training_main'
     }, PRIV.PRIV_USER_PROFILE);
+
+    // 国际化
+    ctx.i18n.load('zh', {
+        algorithm_mindmap: '算法图谱',
+        'Algorithm Mind Map': '算法图谱',
+    });
+
+    ctx.i18n.load('en', {
+        algorithm_mindmap: 'Algorithm Mind Map',
+    });
 
     console.log('CAUCOJ 算法知识图谱插件已加载');
 }
