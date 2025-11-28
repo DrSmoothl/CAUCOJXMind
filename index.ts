@@ -693,12 +693,12 @@ export async function apply(ctx: Context) {
     ctx.Route('algorithm_mindmap', '/mindmap', AlgorithmMindMapHandler);
     ctx.Route('algorithm_mindmap_api', '/mindmap/api/problems', AlgorithmMindMapProblemsHandler);
     
-    // 移除原有的题库导航
-    const navNodes = global.Hydro.ui.nodes.Nav;
-    const problemIndex = navNodes.findIndex(n => n.name === 'problem_main');
-    if (problemIndex !== -1) {
-        navNodes.splice(problemIndex, 1);
-    }
+    // // 移除原有的题库导航
+    // const navNodes = global.Hydro.ui.nodes.Nav;
+    // const problemIndex = navNodes.findIndex(n => n.name === 'problem_main');
+    // if (problemIndex !== -1) {
+    //     navNodes.splice(problemIndex, 1);
+    // }
     
     // 在原位置插入算法图谱（在 training_main 之前，即原 problem_main 的位置）
     ctx.injectUI('Nav', 'algorithm_mindmap', { 
