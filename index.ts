@@ -17,6 +17,19 @@ const getMindMapData = () => ({
         expanded: true,
         children: [
             {
+                id: "语法入门",
+                topic: "语法入门",
+                expanded: false,
+                children: [
+                    { id: "输入输出", topic: "输入输出" },
+                    { id: "判断语句", topic: "判断语句" },
+                    { id: "循环语句", topic: "循环语句" },
+                    { id: "数组", topic: "数组" },
+                    { id: "函数", topic: "函数" },
+                    { id: "指针", topic: "指针" }
+                ]
+            },
+            {
                 id: "基础算法",
                 topic: "基础算法",
                 expanded: false,

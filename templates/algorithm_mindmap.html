@@ -508,8 +508,8 @@
 </style>
 
 <script type="module">
-// 从 CDN 导入 MindElixir
-import MindElixir from "https://cdn.jsdelivr.net/npm/mind-elixir@^3.0.0/dist/MindElixir.js";
+// 从 CDN 导入 MindElixir（使用 unpkg 镜像）
+import MindElixir from "https://unpkg.com/mind-elixir@3.0.0/dist/MindElixir.js";
 
 // 思维导图数据结构
 const mindMapData = {{ mindmap_data_json | safe }};
